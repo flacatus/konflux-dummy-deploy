@@ -18,14 +18,17 @@ spec:
       containers:
         - name: dummy-deployment
           image: quay.io/redhat-appstudio-qe/dummy-deployment:latest
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
           ports:
             - containerPort: 8080
           resources:
             requests:
-              cpu: 5m
+              cpu: 10m
               memory: 16Mi
             limits:
-              cpu: 10m
+              cpu: 50m
               memory: 32Mi
           env:
             - name: DISPLAY_TEXT
