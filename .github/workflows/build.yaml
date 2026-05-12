@@ -1,0 +1,48 @@
+name: dummy-deployment
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  IMAGE: quay.io/redhat-appstudio-qe/dummy-deployment
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set commit SHA tag
+        run: echo "SHA_TAG=${GITHUB_SHA}" >> "$GITHUB_ENV"
+
+      - name: Login to Quay.io
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Build and push (main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ env.SHA_TAG }}
+            ${{ env.IMAGE }}:latest
+
+      - name: Build and push (PR)
+        if: github.event_name == 'pull_request'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:pr-${{ github.event.pull_request.number }}-${{ env.SHA_TAG }}
+          labels: |
+            quay.expires-after=5d
