@@ -29,7 +29,7 @@ This creates:
 
 | Resource | Name | Purpose |
 |----------|------|---------|
-| Namespace | `dummy-deployment` | Isolates the workload |
+| Namespace | `dummy-deployment` | Isolates the workload. |
 | Deployment | `dummy-deployment` | Runs the app (1 replica) |
 | Service | `dummy-deployment` | Exposes port 80 → 8080 |
 
