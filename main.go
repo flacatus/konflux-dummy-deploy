@@ -47,7 +47,7 @@ var tmpl = template.Must(template.New("index").Parse(`<!DOCTYPE html>
 func main() {
 	text := os.Getenv("DISPLAY_TEXT")
 	if text == "" {
-		text = "Hello from Dummy Deployment!!!!x!!!!!"
+		text = "Hello from Dummy Deployment!!!!!!!!!"
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
